@@ -1,6 +1,12 @@
+import random
+from graph import Graph
+from util import Queue
+
+
 class User:
     def __init__(self, name):
         self.name = name
+
 
 class SocialGraph:
     def __init__(self):
@@ -32,21 +38,28 @@ class SocialGraph:
         """
         Takes a number of users and an average number of friendships
         as arguments
-
         Creates that number of users and a randomly distributed friendships
         between those users.
-
-        The number of users must be greater than the average number of friendships.
+        The number of users must be greater than the average number offriendships.
         """
         # Reset graph
         self.last_id = 0
         self.users = {}
         self.friendships = {}
-        # !!!! IMPLEMENT ME
-
         # Add users
-
+        for i in range(num_users):
+            self.add_user(f"User {i}")
         # Create friendships
+        possible_friendships = []
+        for user_id in self.users:
+            for friend_id in range(user_id + 1, self.last_id + 1):
+                possible_friendships.append((user_id, friend_id))
+        # Shuffle the possible friendships
+        random.shuffle(possible_friendships)
+        # Add friendships
+        for i in range(num_users * avg_friendships // 2):
+            friendship = possible_friendships[i]
+            self.add_friendship(friendship[0], friendship[1])
 
     def get_all_social_paths(self, user_id):
         """
@@ -58,7 +71,25 @@ class SocialGraph:
         The key is the friend's ID and the value is the path.
         """
         visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+        q = Queue()
+        # init q with starting point (user_id) and it needs to be a list because we're putting the entire path inside the q
+        q.enqueue([user_id])
+
+        while q.size() > 0:
+            path = q.dequeue()
+            # print(path)
+            current_node = path[-1]
+            # print('current_node: ', current_node)
+            if current_node not in visited:
+                visited[current_node] = path
+                # print('visited: ', visited)
+            for neighbor in self.friendships:
+                if neighbor not in visited:
+                    new_path = list(path)
+                    # print('new_path: ', new_path)
+                    new_path.append(neighbor)
+                    q.enqueue(new_path)
+
         return visited
 
 
