@@ -61,6 +61,16 @@ class SocialGraph:
             friendship = possible_friendships[i]
             self.add_friendship(friendship[0], friendship[1])
 
+    # def populate_graph_2(self, num_users, avg_friendships):
+    #     # Reset the graph
+    #     self.last_id = 0
+    #     self.users = {}
+    #     self.friendships = {}
+
+    #     # Add users
+    #     for i in range(num_users):
+    #         self.add_user(f'User {i+1}')
+
     def get_all_social_paths(self, user_id):
         """
         Takes a user's user_id as an argument
